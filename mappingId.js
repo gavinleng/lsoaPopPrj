@@ -5,25 +5,31 @@
 
 "use strict";
 
-var request = require("request");
-
 module.exports = exports = {
 	_getData: function (config, cb) {
 		var dataId = config.dataId;
-		var _dataId = [];
-		for (var i = 0; i < dataId.length; i++) {
-			_dataId.push('"' + dataId[i] + '"');
-		}
-		
-		var url = 'https://q.nq-m.com/v1/datasets/' + config.datasetId + '/distinct?key=' + config.vId + '&filter={"' + config.fId + '":{"$in":[' + _dataId + ']}}';
 
-		request(url, { json: true }, function(err, resp, body) {
-			if (err || (resp && resp.statusCode !== 200)) {
-				var msg = err ? err.message : body && body.message;
-				console.log("failure running the input data query: " + msg);
-				process.exit(-1);
+		const output = config.output;
+		const api = config.context.tdxApi;
+		
+		output.debug("fetching data for %s", config.mappingId);
+		
+		var datasetId = config.mappingId;
+		var key = config.vId;
+		var filter = {"parent_type": config.parent_type, "child_type": config.child_type};
+		filter[config.fId] = {"$in": dataId};
+		var projection = null;
+		var options = {"limit":15390120};
+		
+		api.getDistinct(datasetId, key, filter, projection, options, function(err, response) {
+			if(err) {
+				output.error("Failed to get data - %s", err.message);
+				process.exit(1);
 			} else {
-				var dataGet = body.data;
+				output.debug("got data");
+				output.progress(50);
+				
+				var dataGet = response.data;
 
 				cb(dataGet);
 			}

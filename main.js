@@ -11,25 +11,29 @@ var mappingId = require("./mappingId.js");
 //projection module
 var dataPrj = require('./dataPrj.js');
 
-var year1 ='2014';
+//get dataConfig file
+var dataConfig = require('./dataConfig.js');
 
-var string = ['E06000045'];
+var year1 = dataConfig.year;
 
-var p2c_config = {"datasetId": "SkxyHi_MR", "parent_type": "LAD15CD", "child_type": "LSOA11CD", "dataId": string};
+var stringArray = dataConfig.areaId;
 
-//var mid2014YearId = "BJlT8w_MR";
+//var midYearONSId = "BJlT8w_MR";
+//var mappingId = "SkxyHi_MR";
 
-const outPath = path.resolve("./SotonPrj2015.json");
+const outPath = path.resolve(dataConfig.outPath);
 
 function databot(input, output, context) {
 	output.progress(0);
 	
-	const api = context.tdxApi;
+	var p2c_config = {"mappingId": input.mappingId, "parent_type": "LAD15CD", "child_type": "LSOA11CD", "dataId": stringArray, "context": context, "output": output};
 	
 	mappingId.p2cId(p2c_config, function (array) {
-		output.debug("fetching data for %s", input.mid2014YearId);
+		output.debug("fetching data for %s", input.midYearONSId);
 		
-		var datasetId = input.mid2014YearId;
+		const api = context.tdxApi;
+		
+		var datasetId = input.midYearONSId;
 		var filter = {"area_id":{"$in":array},"year": year1,"age_band":{"$ne":"All Ages"}};
 		var projection = null;
 		var options = {"limit":15390120};

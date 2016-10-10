@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": ""
   },
   "dependencies": {
-    "lodash": "^3.10.1",
-    "request": "^2.72.0"
+    "lodash": "^3.10.1"
   }
 }
