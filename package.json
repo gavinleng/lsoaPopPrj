@@ -5,5 +5,7 @@
   "scripts": {
     "start": ""
   },
-  "dependencies": {}
+  "dependencies": {
+    "mappingid-bot": "https://github.com/gavinleng/mappingid-bot.git"
+  }
 }

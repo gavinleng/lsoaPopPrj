@@ -6,7 +6,7 @@
 var fs = require("fs");
 var path = require("path");
 
-var mappingId = require("./mappingId.js");
+var mappingId = require("mappingid-bot");
 
 //projection module
 var dataPrj = require('./dataPrj.js');
